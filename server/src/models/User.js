@@ -42,6 +42,42 @@ const userSchema = new mongoose.Schema(
         type: String,
       },
     ],
+
+     githubUsername: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+
+      leetcodeUsername: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+
+      codeforcesUsername: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+
+      codechefUsername: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+
+      gfgUsername: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+
+      hackerrankUsername: {
+        type: String,
+        default: "",
+        trim: true,
+      },
   },
   {
     timestamps: true,

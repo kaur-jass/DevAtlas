@@ -8,6 +8,8 @@ import {
   X, CheckCircle2, Trophy, Star, Plus, Sparkles, Sun, Moon, Trash2
 } from 'lucide-react';
 import axios from "axios";
+
+import DevAtlasTracks from "../tracks/Tracks";
 // Types for Dashboard Component State
 type TimeRange = '7D' | '30D' | '3M' | '1Y' | 'All';
 
@@ -20,6 +22,7 @@ export default function DevAtlasDashboard(): React.JSX.Element {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
   const [notifications, setNotifications] = useState<any[]>([]);
   const notificationRef = useRef<HTMLDivElement>(null);
+  const [activeTab, setActiveTab] = useState("Overview");
   const [showNotifications, setShowNotifications] = useState(false);
 
   // Navigation config matches your design
@@ -206,18 +209,20 @@ const deleteNotification = async (id: string) => {
           {/* Navigation links */}
           <div className="p-3 space-y-1">
             {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={`#${link.name.toLowerCase()}`}
-                className={`flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
-                  link.active 
-                    ? 'bg-purple-600/10 text-purple-400' 
-                    : isDarkMode ? 'text-slate-400 hover:bg-slate-900/50 hover:text-slate-200' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-                }`}
-              >
+              <button
+                  key={link.name}
+                  onClick={() => setActiveTab(link.name)}
+                  className={`w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
+                    activeTab === link.name
+                      ? "bg-purple-600/10 text-purple-400"
+                      : isDarkMode
+                      ? "text-slate-400 hover:bg-slate-900/50 hover:text-slate-200"
+                      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  }`}
+                >
                 <link.icon className="w-4 h-4 shrink-0" />
                 {isSidebarOpen && <span>{link.name}</span>}
-              </a>
+              </button>
             ))}
           </div>
 
@@ -304,7 +309,7 @@ const deleteNotification = async (id: string) => {
               </div>
               <div className="space-y-1">
                 {navLinks.map((link) => (
-                  <button key={link.name} className={`w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-xs font-medium ${link.active ? 'bg-purple-600/10 text-purple-400' : 'text-slate-400'}`}>
+                  <button key={link.name} onClick={() => setActiveTab(link.name)} className={`w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-xs font-medium ${activeTab === link.name ? 'bg-purple-600/10 text-purple-400' : 'text-slate-400'}`}>
                     <link.icon className="w-4.5 h-4.5" /><span>{link.name}</span>
                   </button>
                 ))}
@@ -450,9 +455,13 @@ const deleteNotification = async (id: string) => {
 
         {/* Clean, Non-expanding Scrolling Workspace Body */}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6 max-w-[1600px] w-full mx-auto">
-          
+          {activeTab === "Tracks" ? (
+            <DevAtlasTracks isDarkMode={isDarkMode} />
+          ) : activeTab === "Overview" ? (
+            <>
           {/* Welcome User Row Banner */}
           <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+        
             <div>
               <h2 className="text-xl sm:text-2xl font-black tracking-tight flex items-center gap-2">Good evening, {user?.name || "Developer"}! 👋</h2>
               <p className="text-xs text-slate-500 font-light mt-0.5">Let's continue your learning journey today.</p>
@@ -666,7 +675,12 @@ const deleteNotification = async (id: string) => {
             </div>
 
           </div>
-
+               </>
+        ) : (
+            <div className="p-8 text-center text-xs text-slate-400">
+                {activeTab} Module Framework Interface Placeholder.
+            </div>
+            )}
         </main>
       </div>
     </div>

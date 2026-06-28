@@ -4,9 +4,12 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const authRoutes = require("./routes/authRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
+const accountRoutes = require("./routes/accountRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
+
 
 const app = express();
-
+console.log("🔥 APP.JS LOADED");
 app.use(cors());
 
 app.use(
@@ -21,6 +24,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/accounts", accountRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+
 
 
 app.get("/", (req, res) => {
