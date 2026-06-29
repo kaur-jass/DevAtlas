@@ -37,7 +37,12 @@ const connectedProfileSchema = new mongoose.Schema({
     lastSynced: {
         type: Date,
         default: null,
-    }
+    },
+    
+    syncedData: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {},
+},
 }, { _id: false });
 
 const trackSchema = new mongoose.Schema(

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from "react-router-dom";
 import { 
   Trash2, FolderPlus, Clock, GraduationCap, X 
 } from 'lucide-react';
@@ -8,6 +9,7 @@ import {
   createTrack,
   deleteTrack,
 } from "../../services/trackService";
+
 
 interface TrackItem {
   _id: string;
@@ -30,7 +32,8 @@ export default function DevAtlasTracks({ isDarkMode }: TracksProps): React.JSX.E
   const [newTrackDesc, setNewTrackDesc] = useState<string>('');
   const [newTrackColor, setNewTrackColor] = useState<string>('bg-purple-500');
   const [tracks, setTracks] = useState<TrackItem[]>([]);
-  
+  const navigate = useNavigate();
+
   const colorOptions = [
     { class: 'bg-purple-500', label: 'Purple' },
     { class: 'bg-blue-500', label: 'Blue' },
@@ -123,7 +126,7 @@ export default function DevAtlasTracks({ isDarkMode }: TracksProps): React.JSX.E
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              onClick={() => alert(`Navigating into detailed curriculum module: ${track.name}`)}
+              onClick={() => navigate(`/tracks/${track._id}`)}
               className={`p-5 rounded-2xl border flex flex-col justify-between shadow-sm cursor-pointer hover:border-purple-500/40 transition-all relative overflow-hidden group ${
                 isDarkMode ? 'bg-[#0e0c22]/60 border-slate-900/80' : 'bg-white border-slate-200'
               }`}

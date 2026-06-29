@@ -10,7 +10,10 @@ const {
   addTrack,
   editTrack,
   removeTrack,
+  addConnectedProfile,
+  syncTrackData,
 } = require("../controllers/trackController");
+
 
 router.get("/", protect, getAllTracks);
 
@@ -21,5 +24,9 @@ router.post("/", protect, addTrack);
 router.put("/:id", protect, editTrack);
 
 router.delete("/:id", protect, removeTrack);
+
+router.post("/:id/connect-profile", protect, addConnectedProfile);
+
+router.post("/:id/sync", protect, syncTrackData);
 
 module.exports = router;

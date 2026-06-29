@@ -8,6 +8,7 @@ const accountRoutes = require("./routes/accountRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const trackRoutes = require("./routes/trackRoutes");
 
+
 const app = express();
 console.log("🔥 APP.JS LOADED");
 app.use(cors());
