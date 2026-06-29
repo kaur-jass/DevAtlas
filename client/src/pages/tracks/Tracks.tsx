@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Trash2, FolderPlus, Clock, GraduationCap, X 
 } from 'lucide-react';
+import {
+  getTracks,
+  createTrack,
+  deleteTrack,
+} from "../../services/trackService";
 
 interface TrackItem {
-  id: string;
+  _id: string;
   name: string;
   color: string;
   progress: number;
@@ -24,15 +29,8 @@ export default function DevAtlasTracks({ isDarkMode }: TracksProps): React.JSX.E
   const [newTrackName, setNewTrackName] = useState<string>('');
   const [newTrackDesc, setNewTrackDesc] = useState<string>('');
   const [newTrackColor, setNewTrackColor] = useState<string>('bg-purple-500');
-
-  const [tracks, setTracks] = useState<TrackItem[]>([
-    { id: '1', name: 'DSA', color: 'bg-purple-500', progress: 74, topicsCount: 12, completedTopics: 9, lastActive: '2 hours ago', description: 'Master data structures, algorithms, and complex problem-solving patterns.' },
-    { id: '2', name: 'Web Development', color: 'bg-blue-500', progress: 45, topicsCount: 20, completedTopics: 9, lastActive: 'Yesterday', description: 'Full-stack application engineering with modern responsive web frameworks.' },
-    { id: '3', name: 'AI / ML', color: 'bg-emerald-500', progress: 30, topicsCount: 10, completedTopics: 3, lastActive: '3 days ago', description: 'Neural networks, foundations of machine learning, and processing data models.' },
-    { id: '4', name: 'System Design', color: 'bg-amber-500', progress: 15, topicsCount: 8, completedTopics: 1, lastActive: '1 week ago', description: 'Architecting scalable, distributed systems, and backend high-availability layers.' },
-    { id: '5', name: 'Cyber Security', color: 'bg-pink-500', progress: 0, topicsCount: 15, completedTopics: 0, lastActive: 'Not started', description: 'Penetration testing, cryptographic primitives, and perimeter threat modeling operations.' },
-  ]);
-
+  const [tracks, setTracks] = useState<TrackItem[]>([]);
+  
   const colorOptions = [
     { class: 'bg-purple-500', label: 'Purple' },
     { class: 'bg-blue-500', label: 'Blue' },
@@ -41,30 +39,56 @@ export default function DevAtlasTracks({ isDarkMode }: TracksProps): React.JSX.E
     { class: 'bg-pink-500', label: 'Pink' },
   ];
 
-  const handleCreateTrack = (e: React.FormEvent) => {
+  const handleCreateTrack = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!newTrackName.trim()) return;
 
-    const addedTrack: TrackItem = {
-      id: Date.now().toString(),
-      name: newTrackName,
-      color: newTrackColor,
-      progress: 0,
-      topicsCount: 10,
-      completedTopics: 0,
-      lastActive: 'Just now',
-      description: newTrackDesc.trim() || 'Custom created workspace path segment sequence layer.'
-    };
+    try {
+      await createTrack({
+        name: newTrackName,
+        description: newTrackDesc,
+        color: newTrackColor,
+      });
 
-    setTracks([...tracks, addedTrack]);
-    setNewTrackName('');
-    setNewTrackDesc('');
-    setIsCreateModalOpen(false);
+      await loadTracks();
+
+      setNewTrackName("");
+      setNewTrackDesc("");
+      setNewTrackColor("bg-purple-500");
+
+      setIsCreateModalOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleDeleteTrack = (id: string, e: React.MouseEvent) => {
+  const handleDeleteTrack = async (
+    id: string,
+    e: React.MouseEvent
+  ) => {
     e.stopPropagation();
-    setTracks(tracks.filter(track => track.id !== id));
+
+    try {
+      await deleteTrack(id);
+
+      await loadTracks();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    loadTracks();
+  }, []);
+
+  const loadTracks = async () => {
+    try {
+      const data = await getTracks();
+      setTracks(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -95,7 +119,7 @@ export default function DevAtlasTracks({ isDarkMode }: TracksProps): React.JSX.E
           {tracks.map((track) => (
             <motion.div
               layout
-              key={track.id}
+              key={track._id}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
@@ -114,7 +138,7 @@ export default function DevAtlasTracks({ isDarkMode }: TracksProps): React.JSX.E
                     </h3>
                   </div>
                   <button
-                    onClick={(e) => handleDeleteTrack(track.id, e)}
+                    onClick={(e) => handleDeleteTrack(track._id, e)}
                     className="p-1.5 rounded-lg text-slate-500 hover:text-rose-500 transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />

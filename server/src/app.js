@@ -6,7 +6,7 @@ const authRoutes = require("./routes/authRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const accountRoutes = require("./routes/accountRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
-
+const trackRoutes = require("./routes/trackRoutes");
 
 const app = express();
 console.log("🔥 APP.JS LOADED");
@@ -26,7 +26,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/accounts", accountRoutes);
 app.use("/api/dashboard", dashboardRoutes);
-
+app.use("/api/tracks", trackRoutes);
 
 
 app.get("/", (req, res) => {
