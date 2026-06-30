@@ -1,6 +1,6 @@
 const Track = require("../models/Track");
 
-const platformServices = require("./platforms");
+const { syncLeetCode } = require("./sync");
 
 const syncTrack = async (trackId, userId) => {
 
@@ -15,25 +15,58 @@ const syncTrack = async (trackId, userId) => {
 
     for (const profile of track.connectedProfiles) {
 
-        const service = platformServices[profile.platform];
-
-        if (!service) {
-            console.log(`${profile.platform} is not supported.`);
-            continue;
-        }
-
         try {
 
-            const data = await service(profile.username);
+            switch (profile.platform.toLowerCase()) {
 
-            profile.syncedData = data;
-            profile.lastSynced = new Date();
+                case "leetcode":
 
-        } catch (error) {
+                    await syncLeetCode(
+                        userId,
+                        profile.username
+                    );
 
-            console.log(
-                `Failed to sync ${profile.platform}:`,
-                error.message
+                    profile.lastSynced = new Date();
+
+                    break;
+
+                case "github":
+
+                    console.log("GitHub sync coming soon...");
+
+                    break;
+
+                case "codeforces":
+
+                    console.log("Codeforces sync coming soon...");
+
+                    break;
+
+                case "codechef":
+
+                    console.log("CodeChef sync coming soon...");
+
+                    break;
+
+                case "gfg":
+
+                    console.log("GFG sync coming soon...");
+
+                    break;
+
+                default:
+
+                    console.log(
+                        `Platform ${profile.platform} not supported`
+                    );
+
+            }
+
+        } catch (err) {
+
+            console.error(
+                `${profile.platform} sync failed`,
+                err.message
             );
 
         }
@@ -43,6 +76,7 @@ const syncTrack = async (trackId, userId) => {
     await track.save();
 
     return track;
+
 };
 
 module.exports = {

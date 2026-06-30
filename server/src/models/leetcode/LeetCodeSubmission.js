@@ -8,19 +8,31 @@ const leetCodeSubmissionSchema = new mongoose.Schema({
         required:true,
     },
 
+    submissionId:String,
+
+    questionId:Number,
+
     questionTitle:String,
 
     questionSlug:String,
 
-    language:String,
+    difficulty:String,
 
-    status:String,
+    language:String,
 
     runtime:String,
 
     memory:String,
 
+    status:String,
+
+    timestamp:Number,
+
     submittedAt:Date,
+
+    url:String,
+
+    isAccepted:Boolean,
 
 },{
     timestamps:true,

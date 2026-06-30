@@ -2,52 +2,55 @@ const mongoose = require("mongoose");
 
 const leetCodeProblemSchema = new mongoose.Schema({
 
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+    questionId: {
+        type: Number,
+        unique: true,
         required: true,
     },
 
-    questionId: Number,
+    title: {
+        type: String,
+        required: true,
+    },
 
-    title: String,
-
-    titleSlug: String,
+    titleSlug: {
+        type: String,
+        unique: true,
+    },
 
     difficulty: String,
 
-    status: String,
-
-    tags: [String],
-
-    companies: [String],
+    category: String,
 
     acceptanceRate: Number,
 
-    paidOnly: Boolean,
+    likes: Number,
 
-    frequency: Number,
+    dislikes: Number,
 
-    solvedAt: Date,
+    isPaidOnly: Boolean,
 
-    bookmarked: {
+    hints: [String],
+
+    hasSolution: Boolean,
+
+    hasVideoSolution: Boolean,
+    
+    topicTags: [{
+        name: String,
+        slug: String,
+    }],
+
+    companyTags: [{
+        name: String,
+        slug: String,
+    }],
+
+    similarQuestions: [String],
+
+    officialSolution: {
         type: Boolean,
         default: false,
-    },
-
-    notes: {
-        type: String,
-        default: "",
-    },
-
-    revisionCount: {
-        type: Number,
-        default: 0,
-    },
-
-    confidence: {
-        type: Number,
-        default: 0,
     }
 
 },{

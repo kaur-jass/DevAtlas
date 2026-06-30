@@ -7,7 +7,10 @@ const notificationRoutes = require("./routes/notificationRoutes");
 const accountRoutes = require("./routes/accountRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const trackRoutes = require("./routes/trackRoutes");
-
+const adminRoutes = require("./routes/adminRoutes");
+const problemRoutes = require("./routes/problemRoutes");
+const userProblemRoutes = require("./routes/userProblemRoutes");
+const workspaceRoutes = require("./routes/workspaceRoutes");
 
 const app = express();
 console.log("🔥 APP.JS LOADED");
@@ -28,7 +31,10 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/accounts", accountRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/tracks", trackRoutes);
-
+app.use("/api/admin",adminRoutes);
+app.use("/api/problems", problemRoutes);
+app.use("/api/user/problems", userProblemRoutes);
+app.use("/api/workspace", workspaceRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({

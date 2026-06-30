@@ -2,50 +2,49 @@ const mongoose = require("mongoose");
 
 const leetCodeProfileSchema = new mongoose.Schema({
 
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true,
-        unique: true,
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        unique:true,
+        required:true,
     },
 
-    username: {
-        type: String,
-        required: true,
-    },
+    username:String,
 
-    ranking: Number,
+    realName:String,
 
-    reputation: Number,
+    avatar:String,
 
-    easySolved: Number,
+    ranking:Number,
 
-    mediumSolved: Number,
+    reputation:Number,
 
-    hardSolved: Number,
+    easySolved:Number,
 
-    totalSolved: Number,
+    mediumSolved:Number,
 
-    contestRating: Number,
+    hardSolved:Number,
 
-    globalRanking: Number,
+    totalSolved:Number,
 
-    badges: [
-        {
-            name: String,
-            icon: String,
-        }
-    ],
+    contestRating:Number,
 
-    submissionCalendar: {
-        type: mongoose.Schema.Types.Mixed,
-        default: {},
-    },
+    contestRanking:Number,
 
-    lastSynced: Date,
+    stars:Number,
 
-}, {
-    timestamps: true,
+    views:Number,
+
+    languageStats:mongoose.Schema.Types.Mixed,
+
+    skillStats:mongoose.Schema.Types.Mixed,
+
+    submissionCalendar:mongoose.Schema.Types.Mixed,
+
+    lastSynced:Date,
+
+},{
+    timestamps:true,
 });
 
 module.exports = mongoose.model(
