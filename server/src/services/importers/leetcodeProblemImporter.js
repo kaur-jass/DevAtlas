@@ -40,17 +40,40 @@ const importLeetCodeProblems = async () => {
                 update: {
                     $set: {
                         questionId: Number(problem.questionFrontendId),
+
                         title: problem.title,
+
                         titleSlug: problem.titleSlug,
+
                         difficulty: problem.difficulty,
-                        acceptanceRate: problem.acRate,
+
+                        category: problem.categoryTitle || "",
+
+                        acceptanceRate: problem.acRate || 0,
+
+                        likes: problem.likes || 0,
+
+                        dislikes: problem.dislikes || 0,
+
                         isPaidOnly: problem.isPaidOnly,
+
+                        hints: problem.hints || [],
+
                         hasSolution: problem.hasSolution,
+
                         hasVideoSolution: problem.hasVideoSolution,
-                        tags: problem.topicTags.map(tag => ({
+
+                        topicTags: (problem.topicTags || []).map(tag => ({
                             name: tag.name,
                             slug: tag.slug,
                         })),
+
+                        companyTags: (problem.companyTags || []).map(tag => ({
+                            name: tag.name,
+                            slug: tag.slug,
+                        })),
+
+                        similarQuestions: problem.similarQuestions || [],
                     },
                 },
                 upsert: true,

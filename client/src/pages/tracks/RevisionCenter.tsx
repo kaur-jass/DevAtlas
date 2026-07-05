@@ -1,22 +1,24 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 interface RevisionItem {
   _id: string;
   title: string;
-  slug?: string;
-  lastRevision?: string;
-  revisionCount?: number;
-  topic?: string;
+  slug: string;
+  topic: string;
+  difficulty: "Easy" | "Medium" | "Hard";
+  confidence: number;
+  attempts: number;
+  status: string;
+  priority: number;
+  revisionReason: string;
+  platform: string;
 }
-
 interface RevisionCenterProps {
   variant?: 'mini' | 'full';
   queue?: RevisionItem[];
 }
 
 export default function RevisionCenter({ variant = 'mini', queue = [] }: RevisionCenterProps) {
-  const navigate = useNavigate();
   
   if (variant === 'full') {
     return (
@@ -47,39 +49,104 @@ export default function RevisionCenter({ variant = 'mini', queue = [] }: Revisio
   }
 
   return (
-    <div className="bg-[#0F0C1B] rounded-xl border border-[#1F1A3A] p-4">
-      <div className="flex justify-between items-center mb-3">
-        <div>
-          <h3 className="text-sm font-semibold text-white">Revision Center</h3>
-          <p className="text-[11px] text-gray-500">Decay interval validation logs</p>
-        </div>
-        <span className="text-xs text-purple-400 cursor-pointer hover:underline">View All</span>
-      </div>
+      <div className="bg-[#0F0C1B] rounded-xl border border-[#1F1A3A] p-4">
 
-      <div className="space-y-2">
-        {queue?.slice(0, 3).map((item, idx) => (
-          <div key={item?._id || idx} className="flex items-center justify-between p-2.5 bg-[#151128] border border-[#221A3F] rounded-lg text-xs">
-            <div className="truncate pr-2">
-              <div className="font-medium text-gray-200 flex items-center gap-1.5 truncate">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0" />
-                <span className="truncate">{item?.title}</span>
+          <div className="flex justify-between items-center mb-4">
+
+              <div>
+                  <h3 className="text-sm font-semibold text-white">
+                      📚 Today's Revision
+                  </h3>
+
+                  <p className="text-[11px] text-gray-500">
+                      Focus on your weakest concepts today
+                  </p>
+
               </div>
-              <span className="text-[10px] text-gray-500 pl-3">
-                {item?.lastRevision ? new Date(item.lastRevision).toLocaleDateString() : 'Needs Review'}
+
+              <span className="text-xs text-purple-400">
+                  {queue.length} Problems
               </span>
-            </div>
-            <button 
-              onClick={() => navigate(`/problem/${item?.slug || item?._id}`)}
-              className="px-2.5 py-1 bg-purple-600/20 text-purple-400 border border-purple-500/30 rounded-md hover:bg-purple-600 hover:text-white transition text-[11px] font-medium flex-shrink-0"
-            >
-              Review
-            </button>
+
           </div>
-        ))}
-        {queue?.length === 0 && (
-          <div className="text-center py-4 text-xs text-gray-600">No active tracking metrics require review.</div>
-        )}
+
+          <div className="space-y-3">
+
+              {queue.slice(0, 3).map((item) => (
+
+                  <div
+                      key={item._id}
+                      className="bg-[#141026] border border-[#221A3F] rounded-xl p-3"
+                  >
+
+                      <div className="flex justify-between">
+
+                          <div>
+
+                              <h4 className="text-sm font-semibold text-white">
+                                  {item.title}
+                              </h4>
+
+                              <p className="text-xs text-gray-400 mt-1">
+                                  {item.topic} • {item.difficulty}
+                              </p>
+
+                          </div>
+
+                          <span className="text-red-400 text-xs font-semibold">
+                              {item.priority >= 70
+                                  ? "🔴 High"
+                                  : item.priority >= 40
+                                  ? "🟠 Medium"
+                                  : "🟢 Low"}
+                          </span>
+
+                      </div>
+
+                      <div className="mt-3 text-xs text-gray-400">
+
+                          Confidence
+
+                          <span className="text-purple-400 ml-2">
+                              {item.confidence}%
+                          </span>
+
+                      </div>
+
+                      <div className="text-xs text-gray-500 mt-1">
+                          {item.revisionReason}
+                      </div>
+
+                      <button
+                          onClick={() =>
+                              window.open(
+                                  `https://leetcode.com/problems/${item.slug}`,
+                                  "_blank",
+                                  "noopener,noreferrer"
+                              )
+                          }
+                          className="mt-4 w-full bg-purple-600 hover:bg-purple-500 text-white rounded-lg py-2 text-xs font-medium transition"
+                      >
+                          Review Now
+                      </button>
+
+                  </div>
+
+              ))}
+
+              {queue.length === 0 && (
+
+                  <div className="text-center py-6 text-gray-500 text-sm">
+
+                      🎉 Nothing to revise today.
+
+                  </div>
+
+              )}
+
+          </div>
+
       </div>
-    </div>
   );
+  
 }
